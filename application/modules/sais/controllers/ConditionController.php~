@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * Description of ConditionController
+ *
+ * @author ppd
+ */
+class ConditionController extends Controller
+{
+
+    public function interviewAction()
+    {
+        $this->model = new Model_Condition();
+        $conditions = $this->model->selectAll();
+        $data = [
+            'conditions' => $conditions,
+        ];
+        exit($this->render('interview_view.html.twig', $data));
+    }
+    
+    public function addAction()
+    {
+        
+    }
+    
+    public function editAction()
+    {
+        
+    }
+    
+    public function selectAction()
+    {
+        $conditions = $this->getModel('condition')->selectAll();
+        exit(json_encode($conditions));
+    }
+}

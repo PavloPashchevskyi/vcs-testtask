@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Description of model_conclusion
+ *
+ * @author ppd
+ */
+class Conclusion extends Model 
+{
+    protected $tableName = 'tConclusions';
+}

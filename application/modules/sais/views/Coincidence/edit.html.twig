@@ -1,0 +1,43 @@
+{% extends "common/base.html.twig" %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="/application/modules/sais/views/includes/js/coincidence.js"></script>
+{% endblock %}
+{% block body %}
+    <div id="diveditcoincidencepage">
+        <div id="diveditcoincidence">
+            <input type="hidden" name="coincidence_id" value="{{ coincidence_id }}">
+            <select name="selectconclusion">
+                {% for conclusion in conclusions %}
+                    <option value="{{ conclusion.conclusion_id }}" 
+                            {% if conclusion.conclusion_id == selectedConclusion %} {{ 'selected' }} {% endif %}>{{ conclusion.conclusion_name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <select name="selectcondition">
+                {% for condition in conditions %}
+                     <option value="{{ condition.condition_id }}" 
+                            {% if condition.condition_id == selectedCondition %} {{ 'selected' }} {% endif %}>{{ condition.condition_name }}
+                    </option>
+                {% endfor %}
+            </select>
+                <input id="cbPresence" type="checkbox" name="presence" {% if presence == 1 %} {{ 'checked' }} {% endif %}>
+            <label for="cbPresence">presence</label>
+            <input type="button" name="submitnewcoincidence" value="Edit coincidence">
+            <input type="button" name="deletecoincidence" value="Delete coincidence">
+        </div>
+        <input id="buttonconclusion" type="button" name="conclusion" value="Conclusion">
+            <div id="divconclusion">
+                <input name="conclusion_name" value="{{ conclusions[selectedConclusion-1].conclusion_name }}"><br>
+                <input type="button" name="submitnewconclusion" value="Edit conclusion">
+                <input type="button" name="deleteconclusion" value="Delete conclusion">
+            </div>
+        <input id="buttoncondition" type="button" name="condition" value="Condition">
+        <div id="divcondition">
+            <input name="condition_name" value="{{ conditions[selectedCondition-1].condition_name }}"><br>
+            <input type="button" name="submitnewcondition" value="Edit condition"> 
+            <input type="button" name="deletecondition" value="Delete condition">
+        </div>
+        <div id="divmessages"></div>
+    </div>
+{% endblock %}

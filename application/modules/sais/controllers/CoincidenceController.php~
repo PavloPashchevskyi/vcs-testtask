@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * Description of CoincidenceController
+ *
+ * @author ppd
+ */
+class CoincidenceController extends Controller
+{
+    public function addAction()
+    {
+        echo $this->render('coincidence_view.html.twig');
+    }
+    
+    public function editAction()
+    {
+        
+    }
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}{% endblock %} 
+        {% block javascripts %}
+            <script type="text/javascript" src="/application/modules/sais/views/includes/js/jquery/jquery-1.12.0.js">
+            </script>
+            <script type="text/javascript" src="/application/modules/sais/views/includes/js/jquery/jquery.form.js">
+            </script>
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            {% if welcome is defined %}
+                {{ welcome }}
+            {% endif %}
+        {% endblock %}
+    </body>
+</html>

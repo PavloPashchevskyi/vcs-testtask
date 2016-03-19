@@ -1,0 +1,21 @@
+{% extends "common/base.html.twig" %}
+{% block title %}
+    Interview of user
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="/application/modules/sais/views/includes/js/interview_result.js">
+    </script>
+{% endblock %}
+{% block body %}
+    <form name="forminterview" action="/sais/conclusion/fromconditions" method="post">
+        {% for cond in conditions %}
+            <input type="checkbox" id="cb{{ cond.condition_id }}" name="{{ cond.condition_name }}">
+            <label for="cb{{ cond.condition_id }}">{{ cond.condition_name }}</label>
+            <br/>
+        {% endfor %}
+        <input type="submit" name="submitinterview" value="Send"><br/>
+    </form>
+    <div id="divresponse">
+    </div>
+{% endblock %}
