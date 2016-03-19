@@ -8,6 +8,7 @@
     </script>
 {% endblock %}
 {% block body %}
+    {{ parent() }}
     <form name="forminterview" action="/sais/conclusion/fromconditions" method="post">
         {% for cond in conditions %}
             <input type="checkbox" id="cb{{ cond.condition_id }}" name="{{ cond.condition_name }}">

@@ -112,41 +112,6 @@ function deleteCoincidenceAttribute(attribute) {
     }
 }
 
-function orderCoincidences(orderBy) {
-    var ajaxObject = {
-        type:"post",
-        url:"/sais/coincidence/order",
-        dataType:"json",
-        data: {
-            ordering:orderBy,
-        },
-        success: function() {
-//            window.location.replace('/sais/coincidence/show');
-        },
-        error: function() {
-            console.log('Unable to order coincidences by this criteria!');
-        },
-    }
-    console.log(ajaxObject);
-    $.ajax(ajaxObject);
-}
-
-function orderingColumn(column) {
-    var orderBy = [];
-    orderBy[''+column] = 'DESC';
-    var clicksquantity = 0;
-    $('#'+column).click(function() {
-        clicksquantity++;
-        if(clicksquantity % 2 != 0) {
-            orderBy[''+column] = 'ASC';
-        }
-        else {
-            orderBy[''+column] = 'DESC';
-        }
-        orderCoincidences(orderBy);
-    });
-}
-
 $(document).ready(function() {
     $('#divconclusion').css("display", "none");
     $('#divcondition').css("display", "none");
@@ -208,9 +173,6 @@ $(document).ready(function() {
             $('#divmessages').text('Condition field must not be empty!');
         }
     });
-    orderingColumn('coincidence_id');
-    orderingColumn('conclusion_name');
-    orderingColumn('condition_name');
     $('input[name="submitnewcoincidence"]').click(function() {
         editCoincidence();
     });

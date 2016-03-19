@@ -3,7 +3,9 @@
     <head>
         <meta charset="UTF-8"/>
         <title>{% block title %}{% endblock %}</title>
-        {% block stylesheets %}{% endblock %} 
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="/application/modules/sais/views/includes/css/menu.css">
+        {% endblock %} 
         {% block javascripts %}
             <script type="text/javascript" src="/application/modules/sais/views/includes/js/jquery/jquery-1.12.0.js">
             </script>
@@ -13,6 +15,15 @@
     </head>
     <body>
         {% block body %}
+            {% block vmenu %}
+                <div class="vertical-menu">
+                    <label>Actions with records</label><br/>
+                    <a href="/sais/coincidence/add">Add</a><br/>
+                    <a href="/sais/coincidence/show">Show coincidence</a><br/>
+                    <label>Interview of user</label><br/>
+                    <a href="/sais/condition/interview">Interview</a><br/>
+                </div>
+            {% endblock %}
             {% if welcome is defined %}
                 {{ welcome }}
             {% endif %}

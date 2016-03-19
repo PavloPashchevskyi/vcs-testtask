@@ -167,14 +167,11 @@ class CoincidenceController extends Controller
         exit(json_encode($conditionDeleted));
     }
     
-    public function orderAction()
-    {
-        $_SESSION['ordering'] = $this->post['ordering'];
-    }
     
     public function showAction()
     {
-        $orderBy = $_SESSION['ordering'];
+        if(!empty($this->post['ordering'])) $orderBy = $this->post['ordering']; 
+        else $orderBy = ['coincidence_id' => 'ASC', 'conclusion_name' => 'DESC', 'condition_name' => 'ASC'];
         $coincidences = $this->getEntityManager()->getModel('sais:Coincidence')->selectCoincidencesRelated($orderBy);
         echo $this->render("Coincidence/show.html.twig", ['coincidences' => $coincidences]);
     }

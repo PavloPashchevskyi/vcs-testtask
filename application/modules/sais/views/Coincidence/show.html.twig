@@ -7,11 +7,12 @@
     <script type="text/javascript" src="/application/modules/sais/views/includes/js/coincidence.js"></script>
 {% endblock %}
 {% block body %}
+    {{ parent() }}
     <table>
         <thead>
-        <th><a id="coincidence_id" href="">Coincidence ID</a></th>
-        <th><a id="conclusion_name" href="">Conclusion</a></th>
-        <th><a id="condition_name" href="">Condition</a></th>
+        <th>Coincidence ID</th>
+        <th>Conclusion</th>
+        <th>Condition</th>
         <th>Presence</th>
         <th>Operations with record</th>
         </thead>
