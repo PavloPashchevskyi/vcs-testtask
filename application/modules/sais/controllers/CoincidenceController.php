@@ -122,7 +122,7 @@ class CoincidenceController extends Controller
             'coincidence_id' => $id,
         ];
         $this->getEntityManager()->getModel('sais:Coincidence')->update($what, $criteria);
-        $this->redirect('/sais/coincidence/show');
+        $this->redirect('/sais/coincidence/prepareedit/'.$id);
     }
     
     public function deleteAction()

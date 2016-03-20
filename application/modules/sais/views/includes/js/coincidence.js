@@ -16,7 +16,7 @@ function selectCoincidenceAttribute(attribute) {
     });
 }
 
-function saveCoincidence() {
+function addCoincidence() {
     var conc_id=$('select[name="selectconclusion"] option:selected').val(),
         cond_id=$('select[name="selectcondition"] option:selected').val(),
         pr=$('#cbPresence').prop('checked');
@@ -38,7 +38,7 @@ function saveCoincidence() {
     });
 }
 
-function saveCoincidenceAttribute(attribute) {
+function addCoincidenceAttribute(attribute) {
     var attr_name=$('input[name="'+attribute+'_name"]').val();
     $.ajax({
         type:"post",
@@ -151,7 +151,7 @@ $(document).ready(function() {
     });
     $('input[name="submitcoincidence"]').click(function() {
         if($('select[name="selectconclusion"] option:selected').val()>=1 && $('select[name="selectcondition"] option:selected').val()>=1) {
-            saveCoincidence();
+            addCoincidence();
         }
         else {
             $('#divmessages').text('Condition and conclusion must be selected');
@@ -159,7 +159,7 @@ $(document).ready(function() {
     });
     $('input[name="submitconclusion"]').click(function() {
         if($('input[name="conclusion_name"]').val().length>=1) {
-            saveCoincidenceAttribute('conclusion');
+            addCoincidenceAttribute('conclusion');
         }
         else {
             $('#divmessages').text('Conclusion field must not be empty!');
@@ -167,7 +167,7 @@ $(document).ready(function() {
     });
     $('input[name="submitcondition"]').click(function() {
         if($('input[name="condition_name"]').val().length>=1) {
-            saveCoincidenceAttribute('condition');
+            addCoincidenceAttribute('condition');
         }
         else {
             $('#divmessages').text('Condition field must not be empty!');
