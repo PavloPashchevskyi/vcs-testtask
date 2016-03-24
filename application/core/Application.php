@@ -52,15 +52,21 @@ class Application
             $controllerName = $defaultRouteOptions['controller'];
         }
         if(!empty($routes[$siteFolder + 3])) {
-            $actionName = $routes[$siteFolder + 3];
+            if(is_dir('application/modules/'.$routes[$siteFolder + 1])) {
+                $actionName = $routes[$siteFolder + 3];
+            }
+            else {
+                $actionName = $routes[$siteFolder + 2];
+                $recordId = $routes[$siteFolder + 3];
+            }
         }
         else {
             if(is_dir('application/modules/'.$routes[$siteFolder + 1])) {
                 $actionName = $defaultRouteOptions['action'];
             }
             else {
-                $actionName = !empty($routes[$siteFolder + 2]) ? $routes[$siteFolder + 2] : $defaultRouteOptions['action'];
-                $recordId = $routes[$siteFolder + 3];
+                $controllerName = !empty($routes[$siteFolder + 2]) ? $routes[$siteFolder + 2] : $defaultRouteOptions['controller'];
+                $actionName = $defaultRouteOptions['action'];
             }
         }
         if(!empty($routes[$siteFolder + 4])) {
