@@ -92,7 +92,7 @@ function editCoincidenceAttribute(attribute) {
 
 function deleteCoincidence() {
     var coinc_id = $('input[name="coincidence_id"]').val(),
-        confirm = window.confirm("Do you really wand to delete coincidence #"+coinc_id+'?');
+        confirm = window.confirm("Do you really want to delete coincidence #"+coinc_id+'?');
     if(confirm) {
         $.post("/sais/coincidence/delete/"+coinc_id, null, function() {
             window.location.replace("/sais/coincidence/show");
