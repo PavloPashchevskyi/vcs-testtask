@@ -2,35 +2,47 @@
 {% block title %}
     Show coincidences
 {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="/application/modules/sais/views/includes/css/jquery/jquery.dataTables.min.css">
+{% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="/application/modules/sais/views/includes/js/coincidence.js"></script>
+    <script type="text/javascript" src="/application/modules/sais/views/includes/js/jquery/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#showcoincidences').dataTable();
+        });
+    </script>
 {% endblock %}
 {% block body %}
     {{ parent() }}
-    <table>
-        <thead>
-        <th>Coincidence ID</th>
-        <th>Conclusion</th>
-        <th>Condition</th>
-        <th>Presence</th>
-        <th>Operations with record</th>
-        </thead>
-        <tbody>
-            {% for coincidence in coincidences %}
-                <tr>
-                    <td>{{ coincidence.coincidence_id }}</td>
-                    <td>{{ coincidence.conclusion_name }}</td>
-                    <td>{{ coincidence.condition_name }}</td>
-                    <td>{{ coincidence.presence }}</td>
-                    <td>
-                        {% set recordId = coincidence.coincidence_id %}
-                        <input type="hidden" name="coincidence_id" value="{{ recordId }}">
-                        <a href="/sais/coincidence/prepareedit/{{ recordId }}">edit</a><br/>
-                        <a id="delete_coincidence" href="">delete</a><br/>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div style="width: 600px;">
+        <table id="showcoincidences">
+            <thead>
+            <th>Coincidence ID</th>
+            <th>Conclusion</th>
+            <th>Condition</th>
+            <th>Presence</th>
+            <th>Operations with record</th>
+            </thead>
+            <tbody>
+                {% for coincidence in coincidences %}
+                    <tr>
+                        <td>{{ coincidence.coincidence_id }}</td>
+                        <td>{{ coincidence.conclusion_name }}</td>
+                        <td>{{ coincidence.condition_name }}</td>
+                        <td>{{ coincidence.presence }}</td>
+                        <td>
+                            {% set recordId = coincidence.coincidence_id %}
+                            <input type="hidden" name="coincidence_id" value="{{ recordId }}">
+                            <a href="/sais/coincidence/prepareedit/{{ recordId }}">edit</a><br/>
+                            <a id="delete_coincidence" href="">delete</a><br/>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
