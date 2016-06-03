@@ -5,6 +5,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="/application/modules/sais/views/includes/css/jquery/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/application/modules/sais/views/includes/css/coincidence.css">
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
@@ -12,14 +13,14 @@
     <script type="text/javascript" src="/application/modules/sais/views/includes/js/jquery/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#showcoincidences').dataTable();
+            $('#show_coincidences').dataTable({bStateSave: true});
         });
     </script>
 {% endblock %}
 {% block body %}
     {{ parent() }}
-    <div style="width: 600px;">
-        <table id="showcoincidences">
+    <div id="show_coincidences_wrapper">
+        <table id="show_coincidences">
             <thead>
             <th>Coincidence ID</th>
             <th>Conclusion</th>
