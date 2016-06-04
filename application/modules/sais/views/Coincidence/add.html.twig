@@ -11,23 +11,31 @@
     {{ parent() }}
     <div id="divaddcoincidencepage" class="divcoincidenceoperations">
         <div id="divaddcoincidence">
-            <select name="selectconclusion">
-            </select>
-            <select name="selectcondition">
-            </select>
-            <input id="cbPresence" type="checkbox"><label for="cbPresence">presence</label>
-            <input type="button" name="submitcoincidence" value="Add coincidence">
+            <label for="select_conclusion">Conclusion:</label><br/>
+            <select id="select_conclusion" name="selectconclusion">
+            </select><br/>
+            <label for="select_condition">Condition:</label><br/>
+            <select id="select_condition" name="selectcondition">
+            </select><br/>
+            <input id="cbPresence" type="checkbox"><label for="cbPresence">presence</label><br/>
+            <div class="coincidenceoperationsbuttons-wrapper">
+                <input type="button" name="submitcoincidence" value="Add coincidence">
+            </div>
         </div>
-        <input id="buttonconclusion" type="button" name="conclusion" value="Conclusion">
+        <div class="buttonconclusion-wrapper">
+            <input id="buttonconclusion" type="button" name="conclusion" value="Conclusion">
+        </div>
             <div id="divconclusion">
                 <input name="conclusion_name"><br>
                 <input type="button" name="submitconclusion" value="Add conclusion">
             </div>
-        <input id="buttoncondition" type="button" name="condition" value="Condition">
-        <div id="divcondition">
-            <input name="condition_name"><br>
-            <input type="button" name="submitcondition" value="Add condition">     
-        </div>
+            <div class="buttoncondition-wrapper">
+                <input id="buttoncondition" type="button" name="condition" value="Condition">
+            </div>
+            <div id="divcondition">
+                <input name="condition_name"><br>
+                <input type="button" name="submitcondition" value="Add condition">     
+            </div>
         <div id="divmessages"></div>
     </div>
 {% endblock %}
