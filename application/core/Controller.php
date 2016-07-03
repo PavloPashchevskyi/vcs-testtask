@@ -18,7 +18,7 @@ class Controller extends Twig_Environment
         $moduleName = Application::getModuleName();
         $loader = new Twig_Loader_Filesystem('application/modules/'.$moduleName.'/views');
         parent::__construct($loader, array(
-            'cache' => 'cache',
+            'cache' => 'var/cache',
         ));
         $this->entityManager = new EntityManager();
         $this->request = $_REQUEST;
