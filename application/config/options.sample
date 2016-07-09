@@ -4,8 +4,8 @@ $dbConnectionOptions = [
     'host' => 'localhost',
     'port' => '',
     'user' => 'test',
-    'password' => 'testpasswd',
-    'dbname' => 'sais',
+    'password' => 'password',
+    'dbname' => 'mydbname',
     'persistent' => false,
 ];
 $dbTablesOptions = [
@@ -17,4 +17,3 @@ $defaultRouteOptions = [
     'controller' => 'default',
     'action' => 'index',
 ];
-?>
