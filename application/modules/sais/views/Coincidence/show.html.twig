@@ -39,7 +39,7 @@
                             {% set recordId = coincidence.coincidence_id %}
                             <input type="hidden" name="coincidence_id" value="{{ recordId }}">
                             <a href="/sais/coincidence/prepareedit/{{ recordId }}">edit</a><br/>
-                            <a id="delete_coincidence" href="">delete</a><br/>
+                            <a id="delete_coincidence_{{ recordId }}" href="">delete</a><br/>
                         </td>
                     </tr>
                 {% endfor %}

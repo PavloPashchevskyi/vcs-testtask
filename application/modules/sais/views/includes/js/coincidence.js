@@ -191,7 +191,7 @@ $(document).ready(function() {
     $('input[name="deletecondition"]').click(function() {
         deleteCoincidenceAttribute('condition');
     });
-    $('#delete_coincidence').click(function() {
+    $('a[id^="delete_coincidence_"]').click(function() {
         deleteCoincidence();
     });
 });
