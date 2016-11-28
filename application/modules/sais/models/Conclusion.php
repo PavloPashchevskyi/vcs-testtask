@@ -7,6 +7,6 @@
  */
 class Conclusion extends Model 
 {
-    protected $tableName = 'tconclusions';
+    protected $tableName = 'tConclusions';
     
 }

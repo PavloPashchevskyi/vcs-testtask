@@ -1,16 +1,16 @@
 <?php
     class Coincidence extends Model
     {
-        protected $tableName = 'tcoincidences';
+        protected $tableName = 'tCoincidences';
         
         public function selectConclusionConditions($conclusionName)
         {
-            $sql = 'SELECT tconclusions.conclusion_name, tconditions.condition_name, '.
+            $sql = 'SELECT tConclusions.conclusion_name, tConditions.condition_name, '.
                     $this->tableName.'.presence FROM '.$this->tableName.' '.
-                    'JOIN tconclusions ON('.$this->tableName.'.ConclusionID=tconclusions.conclusion_id) '.
-                    'JOIN tconditions ON ('.$this->tableName.'.ConditionID=tconditions.condition_id) '.
-                    'WHERE tconclusions.conclusion_name="'.$conclusionName.'" '.
-                    'ORDER BY tconditions.condition_name ';
+                    'JOIN tConclusions ON('.$this->tableName.'.ConclusionID=tConclusions.conclusion_id) '.
+                    'JOIN tConditions ON ('.$this->tableName.'.ConditionID=tConditions.condition_id) '.
+                    'WHERE tConclusions.conclusion_name="'.$conclusionName.'" '.
+                    'ORDER BY tConditions.condition_name ';
                 $query = $this->connection->query($sql);
                 if(!$query) {
                     exit("Unable to execute the query ".$sql."<br>");
@@ -33,15 +33,15 @@
                 if($i<count($orderBy)-1) $orderByClause.=', ';
                 $i++;
             }
-            $sql = 'SELECT tcoincidences.coincidence_id, '.
-                    'tconclusions.conclusion_id, '.
-                    'tconclusions.conclusion_name, '.
-                    'tconditions.condition_id, '.
-                    'tconditions.condition_name, '.
-                    'tcoincidences.presence '.
-                    'FROM tcoincidences '.
-                    'JOIN tconclusions ON(tcoincidences.ConclusionID=tconclusions.conclusion_id) '.
-                    'JOIN tconditions ON(tcoincidences.ConditionID=tconditions.condition_id) '.
+            $sql = 'SELECT tCoincidences.coincidence_id, '.
+                    'tConclusions.conclusion_id, '.
+                    'tConclusions.conclusion_name, '.
+                    'tConditions.condition_id, '.
+                    'tConditions.condition_name, '.
+                    'tCoincidences.presence '.
+                    'FROM tCoincidences '.
+                    'JOIN tConclusions ON(tCoincidences.ConclusionID=tConclusions.conclusion_id) '.
+                    'JOIN tConditions ON(tCoincidences.ConditionID=tConditions.condition_id) '.
                     $orderByClause;
             $query = $this->connection->query($sql);
             if(!$query) {

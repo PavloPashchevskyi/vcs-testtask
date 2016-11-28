@@ -52,24 +52,22 @@ class CoincidenceController extends Controller
         exit(json_encode($queryresult));
     }
     
-    public function editconclusionAction()
+    public function editconclusionAction($id)
     {
-        $id = Application::getRecordId();
         $em = $this->getEntityManager();
         $coincidence = $em->getModel('sais:Coincidence')->findOne($id);
         $what = [
             'conclusion_name' => '"'.$this->post['new_conclusion_name'].'"',
         ];
         $criteria = [
-            'conclusion_id' => $coincidence['conclusionid'],
+            'conclusion_id' => $coincidence['ConclusionID'],
         ];
         $conclusion = $em->getModel('sais:Conclusion')->update($what, $criteria);
         exit(json_encode($conclusion));
     }
     
-    public function editconditionAction()
+    public function editconditionAction($id)
     {
-        $id = Application::getRecordId();
         $em = $this->getEntityManager();
         $coincidence = $em->getModel('sais:Coincidence')->findOne($id);
         $what = [
@@ -82,20 +80,19 @@ class CoincidenceController extends Controller
         exit(json_encode($condition));
     }
     
-    public function prepareeditAction()
+    public function prepareeditAction($id)
     {
-        $id = Application::getRecordId();
         $coincidence = $this->getEntityManager()->getModel('sais:Coincidence')->findOne($id);
         $conclusions = $this->getEntityManager()->getModel('sais:Conclusion')->findAll();
         $conditions = $this->getEntityManager()->getModel('sais:Condition')->findAll();
         foreach($conclusions as $conclusion) {
-            if($conclusion['conclusion_id'] == $coincidence['conclusionid']) {
-                $conclusionIdBefore = $coincidence['conclusionid'];
+            if($conclusion['conclusion_id'] == $coincidence['ConclusionID']) {
+                $conclusionIdBefore = $coincidence['ConclusionID'];
             }
         }
         foreach($conditions as $condition) {
-            if($condition['condition_id'] == $coincidence['conditionid']) {
-                $conditionIdBefore = $coincidence['conditionid'];
+            if($condition['condition_id'] == $coincidence['ConditionID']) {
+                $conditionIdBefore = $coincidence['ConditionID'];
             }
         }
         $presence = $coincidence['presence'];
@@ -110,9 +107,8 @@ class CoincidenceController extends Controller
         ]);
     }
     
-    public function editAction()
+    public function editAction($id)
     {
-        $id = Application::getRecordId();
         $what = [
             'conclusionid' => $this->post['new_conclusion_id'],
             'conditionid' => $this->post['new_condition_id'],
@@ -125,9 +121,8 @@ class CoincidenceController extends Controller
         $this->redirect('/sais/coincidence/prepareedit/'.$id);
     }
     
-    public function deleteAction()
+    public function deleteAction($id)
     {
-        $id = Application::getRecordId();
         $criteria = [
             'coincidence_id' => $id,
         ];
@@ -135,9 +130,8 @@ class CoincidenceController extends Controller
         exit(json_encode($deleted));
     }
     
-    public function deleteconclusionAction()
+    public function deleteconclusionAction($id)
     {
-        $id = Application::getRecordId();
         $em = $this->getEntityManager();
         $coincidence = $em->getModel('sais:Coincidence')->findOne($id);
         $coincidenceCriteria = [
@@ -151,9 +145,8 @@ class CoincidenceController extends Controller
         exit(json_encode($conclusionDeleted));
     }
     
-    public function deleteconditionAction()
+    public function deleteconditionAction($id)
     {
-        $id = Application::getRecordId();
         $em = $this->getEntityManager();
         $coincidence = $em->getModel('sais:Coincidence')->findOne($id);
         $coincidenceCriteria = [

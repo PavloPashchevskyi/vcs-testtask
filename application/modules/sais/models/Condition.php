@@ -7,7 +7,7 @@
  */
 class Condition extends Model
 {
-    protected $tableName = 'tconditions';
+    protected $tableName = 'tConditions';
     
     public function selectAbsent($conditionNames)
     {

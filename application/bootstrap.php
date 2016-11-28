@@ -1,5 +1,5 @@
 <?php
-require_once 'config/options.php';
+$defaultOptions = require_once 'config/options.php';
 require_once 'core/DBConnection.php';
 //router
 require_once 'core/Application.php';
@@ -17,6 +17,5 @@ require_once 'core/Model.php';
 require_once 'core/View.php';
 require_once 'core/Controller.php';
 
-global $defaultRouteOptions;
-Application::start($defaultRouteOptions);
+Application::start($defaultOptions['default_route']);
 ?>

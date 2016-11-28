@@ -12,9 +12,9 @@ class Model extends DBConnection
     
     public function __construct() {
         parent::__construct();
-        global $dbTablesOptions;
-        $tableNamePrefix = $dbTablesOptions['prefix'];
-        $tableNameSuffix = $dbTablesOptions['suffix'];
+        global $defaultOptions;
+        $tableNamePrefix = $defaultOptions['dbtable']['prefix'];
+        $tableNameSuffix = $defaultOptions['dbtable']['suffix'];
         $beginpos = strpos($this->tableName, $tableNamePrefix)+strlen($tableNamePrefix);
         $endpos = strrpos($this->tableName, $tableNameSuffix);
         $length = $endpos-$beginpos;

@@ -10,17 +10,17 @@ class DBConnection
     protected $connection;
     public function __construct() 
     {
-        global $dbConnectionOptions;
-        $dsn = $dbConnectionOptions['server'].
-                ':host='.$dbConnectionOptions['host'];
-        if(!empty($dbConnectionOptions['port'])) {
-            $dsn.=':'.$dbConnectionOptions['port'];
+        global $defaultOptions;
+        $dsn = $defaultOptions['dbconnection']['server'].
+                ':host='.$defaultOptions['dbconnection']['host'];
+        if(!empty($defaultOptions['dbconnection']['port'])) {
+            $dsn.=':'.$defaultOptions['dbconnection']['port'];
         }
         $dsn.=';dbname='.
-                $dbConnectionOptions['dbname'];
-        $username = $dbConnectionOptions['user'];
-        $password = $dbConnectionOptions['password'];
-        $options[PDO::ATTR_PERSISTENT] = $dbConnectionOptions['persistent'];
+                $defaultOptions['dbconnection']['dbname'];
+        $username = $defaultOptions['dbconnection']['user'];
+        $password = $defaultOptions['dbconnection']['password'];
+        $options[PDO::ATTR_PERSISTENT] = $defaultOptions['dbconnection']['persistent'];
         try {
             $this->connection = new PDO($dsn, $username, $password, $options);
         }

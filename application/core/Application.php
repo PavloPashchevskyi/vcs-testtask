@@ -4,7 +4,7 @@ class Application
     private static $moduleName;
     private static $controllerName;
     private static $actionName;
-    private static $recordId;
+    private static $actionArguments;
 
     /**
      * Router of MVC application
@@ -70,12 +70,12 @@ class Application
             }
         }
         if(!empty($routes[$siteFolder + 4])) {
-            $recordId = $routes[$siteFolder + 4];
+            $actionArguments = array_slice($routes, $siteFolder + 4);
         }
         self::$moduleName = $moduleName;
         self::$controllerName = $controllerName;
         self::$actionName = $actionName;
-        if(!empty($recordId)) self::$recordId = $recordId;
+        self::$actionArguments = (!empty($actionArguments)) ? $actionArguments : [];
         $actionMethodName = $actionName.'Action';
         $moduleDir = 'application/modules/'.$moduleName;
         $modelControllerFirstNamePart = ucfirst($controllerName);
@@ -98,7 +98,7 @@ class Application
             throw new ControllerClassNotDefinedException($moduleName, $controllerName);
         }
         if(method_exists($controllerObject, $actionMethodName)) {
-            $controllerObject->$actionMethodName();
+            call_user_func_array([$controllerObject, $actionMethodName], self::$actionArguments);
         }
         else {
             throw new ActionNotFoundException($moduleName, $controllerName, $actionName);
@@ -118,11 +118,6 @@ class Application
     public static function getActionName()
     {
         return self::$actionName;
-    }
-    
-    public static function getRecordId()
-    {
-        return self::$recordId;
     }
 }
 ?>
