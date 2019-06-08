@@ -1,6 +1,5 @@
 var/cache/
 var/logs/**
 nbproject/
-.htaccess
 application/config/options.php
 vendor/

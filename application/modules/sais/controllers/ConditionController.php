@@ -1,5 +1,9 @@
 <?php
 
+namespace Application\Modules\Sais\Controllers;
+
+use Application\Core\Controller;
+
 /**
  * Description of ConditionController
  *
@@ -14,7 +18,7 @@ class ConditionController extends Controller
         $data = [
             'conditions' => $conditions,
         ];
-        exit($this->render('Condition/interview.html.twig', $data));
+        exit($this->view->render('Condition/interview.html.twig', $data));
     }
     
     public function addAction()

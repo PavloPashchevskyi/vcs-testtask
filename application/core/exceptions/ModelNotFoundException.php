@@ -1,11 +1,13 @@
 <?php
 
+namespace Application\Core\Exceptions;
+
 /**
  * Description of ModelNotFoundException
  *
  * @author ppd
  */
-class ModelNotFoundException extends Exception
+class ModelNotFoundException extends \Exception
 {
     public function __construct($moduleName = "", $modelName = "", \Exception $previous = null) 
     {

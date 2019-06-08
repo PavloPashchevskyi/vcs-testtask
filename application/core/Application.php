@@ -1,4 +1,9 @@
 <?php
+
+namespace Application\Core;
+
+use Application\Core\Exceptions;
+
 class Application
 {
     private static $moduleName;
@@ -7,11 +12,11 @@ class Application
     private static $actionArguments;
 
     /**
-     * Router of MVC application
-     * Includes needed files with model and controller classes,
-     * creates instance of controller and calls controller action
-     * 
-     * @param array $defaultRouteOptions
+     * @param null $defaultRouteOptions
+     * @throws Exceptions\ActionNotFoundException
+     * @throws Exceptions\ControllerClassNotDefinedException
+     * @throws Exceptions\ControllerNotFoundException
+     * @throws Exceptions\ModuleNotFoundException
      */
     public static function start($defaultRouteOptions = null)
     {
@@ -36,7 +41,7 @@ class Application
                 $controllerName = $defaultRouteOptions['controller'];
             }
             else {
-                throw new ModuleNotFoundException($moduleName);
+                throw new Exceptions\ModuleNotFoundException($moduleName);
             }
         }
         if(!empty($routes[$siteFolder + 2])) {
@@ -77,31 +82,23 @@ class Application
         self::$actionName = $actionName;
         self::$actionArguments = (!empty($actionArguments)) ? $actionArguments : [];
         $actionMethodName = $actionName.'Action';
-        $moduleDir = 'application/modules/'.$moduleName;
+        $moduleNamespace = "\\Application\\Modules\\".ucfirst($moduleName);
         $modelControllerFirstNamePart = ucfirst($controllerName);
-        $modelFile = $moduleDir.'/models/'.$modelControllerFirstNamePart.'.php';
-        if(file_exists($modelFile)) {
-            include_once $modelFile;
-        }
         $controllerClassName = $modelControllerFirstNamePart.'Controller';
-        $controllerFile = $moduleDir.'/controllers/'.$controllerClassName.'.php';
-        if(file_exists($controllerFile)) {
-            include_once $controllerFile;
+        $controllerFullQualifiedName = $moduleNamespace."\\Controllers\\".$controllerClassName;
+        if(class_exists($controllerFullQualifiedName)) {
+            $controllerObject = new $controllerFullQualifiedName();
+        } else {
+            throw new Exceptions\ControllerNotFoundException($moduleName, $controllerClassName);
         }
-        else {
-            throw new ControllerNotFoundException($moduleName, $controllerName);
-        }
-        if(class_exists($controllerClassName, false)) {
-            $controllerObject = new $controllerClassName();
-        }
-        else {
-            throw new ControllerClassNotDefinedException($moduleName, $controllerName);
+        if (!$controllerObject) {
+            throw new Exceptions\ControllerClassNotDefinedException($moduleName, $controllerName);
         }
         if(method_exists($controllerObject, $actionMethodName)) {
             call_user_func_array([$controllerObject, $actionMethodName], self::$actionArguments);
         }
         else {
-            throw new ActionNotFoundException($moduleName, $controllerName, $actionName);
+            throw new Exceptions\ActionNotFoundException($moduleName, $controllerName, $actionName);
         }
     }
 
@@ -120,4 +117,3 @@ class Application
         return self::$actionName;
     }
 }
-?>

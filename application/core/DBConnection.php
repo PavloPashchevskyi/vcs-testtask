@@ -1,5 +1,7 @@
 <?php
 
+namespace Application\Core;
+
 /**
  * Description of DBConnection
  *
@@ -14,17 +16,18 @@ class DBConnection
         $dsn = $defaultOptions['dbconnection']['server'].
                 ':host='.$defaultOptions['dbconnection']['host'];
         if(!empty($defaultOptions['dbconnection']['port'])) {
-            $dsn.=':'.$defaultOptions['dbconnection']['port'];
+            $dsn.=';port='.$defaultOptions['dbconnection']['port'];
         }
-        $dsn.=';dbname='.
-                $defaultOptions['dbconnection']['dbname'];
+        if (!empty($defaultOptions['dbconnection']['dbname'])) {
+            $dsn .= ';dbname='.$defaultOptions['dbconnection']['dbname'];
+        }
         $username = $defaultOptions['dbconnection']['user'];
         $password = $defaultOptions['dbconnection']['password'];
-        $options[PDO::ATTR_PERSISTENT] = $defaultOptions['dbconnection']['persistent'];
+        $options[\PDO::ATTR_PERSISTENT] = $defaultOptions['dbconnection']['persistent'];
         try {
-            $this->connection = new PDO($dsn, $username, $password, $options);
+            $this->connection = new \PDO($dsn, $username, $password, $options);
         }
-        catch (PDOException $e) {
+        catch (\PDOException $e) {
             echo $e->getCode()." ".$e->getMessage()."<br>";
         }
     }

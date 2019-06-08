@@ -1,5 +1,9 @@
 <?php
 
+namespace Application\Modules\Sais\Controllers;
+
+use Application\Core\Controller;
+
 /**
  * Description of CoincidenceController
  *
@@ -25,7 +29,7 @@ class CoincidenceController extends Controller
     
     public function addAction()
     {
-        echo $this->render('Coincidence/add.html.twig');
+        echo $this->view->render('Coincidence/add.html.twig');
     }
     
     public function addconclusionAction()
@@ -60,7 +64,7 @@ class CoincidenceController extends Controller
             'conclusion_name' => '"'.$this->post['new_conclusion_name'].'"',
         ];
         $criteria = [
-            'conclusion_id' => $coincidence['ConclusionID'],
+            'conclusion_id' => $coincidence['conclusionid'],
         ];
         $conclusion = $em->getModel('sais:Conclusion')->update($what, $criteria);
         exit(json_encode($conclusion));
@@ -86,18 +90,18 @@ class CoincidenceController extends Controller
         $conclusions = $this->getEntityManager()->getModel('sais:Conclusion')->findAll();
         $conditions = $this->getEntityManager()->getModel('sais:Condition')->findAll();
         foreach($conclusions as $conclusion) {
-            if($conclusion['conclusion_id'] == $coincidence['ConclusionID']) {
-                $conclusionIdBefore = $coincidence['ConclusionID'];
+            if($conclusion['conclusion_id'] == $coincidence['conclusionid']) {
+                $conclusionIdBefore = $coincidence['conclusionid'];
             }
         }
         foreach($conditions as $condition) {
-            if($condition['condition_id'] == $coincidence['ConditionID']) {
-                $conditionIdBefore = $coincidence['ConditionID'];
+            if($condition['condition_id'] == $coincidence['conditionid']) {
+                $conditionIdBefore = $coincidence['conditionid'];
             }
         }
         $presence = $coincidence['presence'];
         
-        echo $this->render('Coincidence/edit.html.twig', [
+        echo $this->view->render('Coincidence/edit.html.twig', [
             'coincidence_id' => $id,
             'conclusions' => $conclusions,
             'selectedConclusion' => $conclusionIdBefore,
@@ -166,6 +170,6 @@ class CoincidenceController extends Controller
         if(!empty($this->post['ordering'])) $orderBy = $this->post['ordering']; 
         else $orderBy = ['coincidence_id' => 'ASC', 'conclusion_name' => 'DESC', 'condition_name' => 'ASC'];
         $coincidences = $this->getEntityManager()->getModel('sais:Coincidence')->selectCoincidencesRelated($orderBy);
-        echo $this->render("Coincidence/show.html.twig", ['coincidences' => $coincidences]);
+        echo $this->view->render("Coincidence/show.html.twig", ['coincidences' => $coincidences]);
     }
 }

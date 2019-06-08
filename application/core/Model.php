@@ -1,5 +1,7 @@
 <?php
 
+namespace Application\Core;
+
 /**
  * Description of Model
  *
@@ -15,8 +17,8 @@ class Model extends DBConnection
         global $defaultOptions;
         $tableNamePrefix = $defaultOptions['dbtable']['prefix'];
         $tableNameSuffix = $defaultOptions['dbtable']['suffix'];
-        $beginpos = strpos($this->tableName, $tableNamePrefix)+strlen($tableNamePrefix);
-        $endpos = strrpos($this->tableName, $tableNameSuffix);
+        $beginpos = strpos($this->tableName, (string) $tableNamePrefix)+strlen($tableNamePrefix);
+        $endpos = strrpos($this->tableName, (string) $tableNameSuffix);
         $length = $endpos-$beginpos;
         $this->modelName = ucfirst(substr($this->tableName, $beginpos, $length));
     }
@@ -38,12 +40,12 @@ class Model extends DBConnection
                 $i++;
             }
         }
-        $sql = 'SELECT * FROM '.$this->tableName.' '.$orderByClause; 
+        $sql = 'SELECT * FROM '.$this->tableName.' '.$orderByClause;
         $query = $this->connection->query($sql);
         if(!$query) {
             exit("Unable to execute the query ".$sql."<br>");
         }
-        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        $results = $query->fetchAll(\PDO::FETCH_ASSOC);
         return $results;
     }
     
@@ -61,7 +63,7 @@ class Model extends DBConnection
         if(!$query) {
             exit("Unable to execute the query ".$sql."<br>");
         }
-        $result = $query->fetch(PDO::FETCH_ASSOC);
+        $result = $query->fetch(\PDO::FETCH_ASSOC);
         return $result;
     }
 
@@ -74,25 +76,22 @@ class Model extends DBConnection
      */
     public function findBy($criteria, $operation = 'AND', $orderBy = null)
     {
+        $whereClause = '';
         if(!empty($criteria)) {
-            $whereclause = 'WHERE ';
-        }
-        else {
-            $whereclause = '';
+            $whereClause .= 'WHERE ';
         }
         $i = 0;
         foreach($criteria as $key => $value) {
-            $whereclause.=$key.'='.$value;
+            $whereClause.=$key.'='.$value;
             if($i<count($criteria)-1) {
-                $whereclause.=' '.$operation.' ';
+                $whereClause.=' '.$operation.' ';
             }
             $i++;
         }
+
+        $orderByClause = '';
         if(!empty($orderBy)) {
-            $orderByClause.='ORDER BY ';
-        }
-        else {
-            $orderByClause = '';
+            $orderByClause .= 'ORDER BY ';
         }
         $i = 0;
         foreach($orderBy as $field => $order) {
@@ -100,37 +99,44 @@ class Model extends DBConnection
             if($i<count($orderBy)-1) $orderByClause.=', ';
             $i++;
         }
-        $sql = 'SELECT * FROM '.$this->tableName.' '.$whereclause.' '.$orderByClause;
+        $sql = 'SELECT * FROM '.$this->tableName.' '.$whereClause.' '.$orderByClause;
         $query = $this->connection->query($sql);
         if(!$query) {
             exit("Unable to execute the query ".$sql."<br>");
         }
-        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        $results = $query->fetchAll(\PDO::FETCH_ASSOC);
         return $results;
     }
-    
+
     /**
-     * 
-     * @param array $what
-     * @return boolean
+     * @param $what
+     * @return bool
      */
     public function insert($what)
     {
-        $whatclause = '';
-        $i = 0;
-        foreach($what as $key => $value) {
-            $whatclause.=$key.'='.$value;
-            if($i<count($what)-1) {
-                $whatclause.=', ';
-            }
-            $i++;
+        $fieldNames = array_keys($what);
+        $fieldParams = array_map(function ($fieldName) {return ':'.$fieldName;}, $fieldNames);
+
+        $preparedFieldNames = implode(',', $fieldNames);
+        $preparedFieldParams = implode(',', $fieldParams);
+
+        $sql = 'INSERT INTO '.$this->tableName.'('.$preparedFieldNames.') VALUES('.$preparedFieldParams.');';
+        $query = $this->connection->prepare($sql);
+        if($query->errorCode()) {
+            exit('ERROR#'.$query->errorCode().': '.$query->errorInfo()."<br/>Unable to execute the query<br/>".$sql);
         }
-        $sql = 'INSERT INTO '.$this->tableName.' SET '.$whatclause;
-        $query = $this->connection->query($sql);
-        if(!$query) {
-            echo "Unable to execute the query ".$sql."<br>";
+        foreach ($what as $fieldName => $fieldValue) {
+            $query->bindValue(':'.$fieldName, $this->unquoteString($fieldValue));
         }
-        return $query;
+
+        try {
+            return $query->execute();
+        } catch (\PDOException $exception) {
+            exit(
+                'EXCEPTION#'.$exception->getCode().': '.$exception->getMessage().
+                "<br/>Unable to execute the query ".$sql.' with the following params '.$query->debugDumpParams()
+            );
+        }
     }
     
     /**
@@ -142,30 +148,38 @@ class Model extends DBConnection
      */
     public function update($what, $criteria, $operation = 'AND')
     {
-        $whatclause = '';
+        $whatClause = '';
         $i = 0;
         foreach($what as $key => $value) {
-            $whatclause.=$key.'='.$value;
+            $whatClause.=$key.'=:_'.$key;
             if($i<count($what)-1) {
-                $whatclause.=', ';
+                $whatClause.=', ';
             }
             $i++;
         }
-        $whereclause = '';
-        $i = 0;
-        foreach($criteria as $key => $value) {
-            $whereclause.=$key.'='.$value;
-            if($i<count($criteria)-1) {
-                $whereclause.=' '.$operation.' ';
-            }
-            $i++;
+
+        $whereClause = $this->sqlQueryWhereClause($criteria, $operation);
+
+        $sql = 'UPDATE '.$this->tableName.' SET '.$whatClause.' WHERE '.$whereClause;
+        $query = $this->connection->prepare($sql);
+        if($query->errorCode()) {
+            exit('ERROR#'.$query->errorCode().': '.$query->errorInfo()."<br/>Unable to execute the query<br/>".$sql);
         }
-        $sql = 'UPDATE '.$this->tableName.' SET '.$whatclause.' WHERE '.$whereclause;
-        $query = $this->connection->query($sql);
-        if(!$query) {
-            echo "Unable to execute the query ".$sql."<br>";
+        foreach ($what as $key => $value) {
+            $query->bindValue(':_'.$key, $this->unquoteString($value));
         }
-        return $query;
+        foreach ($criteria as $key => $value) {
+            $query->bindValue(':'.$key, $this->unquoteString($value));
+        }
+
+        try {
+            return $query->execute();
+        } catch (\PDOException $exception) {
+            exit(
+                'EXCEPTION#'.$exception->getCode().': '.$exception->getMessage().
+                "<br/>Unable to execute the query ".$sql.' with the following params '.$query->debugDumpParams()
+            );
+        }
     }
     
     /**
@@ -176,26 +190,30 @@ class Model extends DBConnection
      */
     public function delete($criteria, $operation = 'AND')
     {
+        $whereClause = '';
         if(!empty($criteria)) {
-            $whereclause = 'WHERE ';
+            $whereClause = 'WHERE ';
         }
-        else {
-            $whereclause = '';
+
+        $whereClause .= $this->sqlQueryWhereClause($criteria, $operation);
+        $sql = 'DELETE FROM '.$this->tableName.' '.$whereClause;
+        $query = $this->connection->prepare($sql);
+        if($query->errorCode()) {
+            exit('ERROR#'.$query->errorCode().': '.$query->errorInfo()."<br/>Unable to execute the query<br/>".$sql);
         }
-        $i = 0;
-        foreach($criteria as $key => $value) {
-            $whereclause.=$key.'='.$value;
-            if($i<count($criteria)-1) {
-                $whereclause.=' '.$operation.' ';
-            }
-            $i++;
+
+        foreach ($criteria as $key => $fieldValue) {
+            $query->bindValue(':'.$key, $this->unquoteString($fieldValue));
         }
-        $sql = 'DELETE FROM '.$this->tableName.' '.$whereclause;
-        $query = $this->connection->query($sql);
-        if(!$query) {
-            echo "Unable to execute the query ".$sql."<br>";
+
+        try {
+            return $query->execute();
+        } catch (\PDOException $exception) {
+            exit(
+                'EXCEPTION#'.$exception->getCode().': '.$exception->getMessage().
+                "<br/>Unable to execute the query ".$sql.' with the following params '.$query->debugDumpParams()
+            );
         }
-        return $query;
     }
     
     /**
@@ -211,8 +229,28 @@ class Model extends DBConnection
         if(!$query) {
             exit("Unable to execute the query ".$sql."<br>");
         }
-        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        $results = $query->fetchAll(\PDO::FETCH_ASSOC);
         $nextid = $results[0]['maxid']+1;
         return $nextid;
+    }
+
+    private function sqlQueryWhereClause($criteria, $operation = 'AND')
+    {
+        $whereClause = '';
+        $i = 0;
+        foreach($criteria as $key => $value) {
+            $whereClause .= $key.'=:'.$key;
+            if($i < count($criteria) - 1) {
+                $whereClause .= ' ' . $operation . ' ';
+            }
+            $i++;
+        }
+
+        return $whereClause;
+    }
+
+    private function unquoteString($str)
+    {
+        return (is_string($str)) ? trim($str, "\"") : $str;
     }
 }

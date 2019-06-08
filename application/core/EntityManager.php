@@ -1,5 +1,9 @@
 <?php
 
+namespace Application\Core;
+
+use Application\Core\Exceptions;
+
 /**
  * Description of EntityManager
  *
@@ -14,19 +18,15 @@ class EntityManager
         $modulePathParts = explode(':', $modelPath);
         $moduleName = strtolower($modulePathParts[0]);
         $modelName = ucfirst($modulePathParts[1]);
-        $modelFile = 'application/modules/'.$moduleName.'/models/'.$modelName.'.php';
-        if(file_exists($modelFile)) {
-            include_once $modelFile;
-        }
-        else {
-            throw new ModelNotFoundException($moduleName, $modelName);
-        }
-        if(class_exists($modelName, false)) {
-            $this->model = new $modelName();
+        $modelFullQualifiedName = "\\Application\\Modules\\".$moduleName."\\Models\\".$modelName;
+        if(class_exists($modelFullQualifiedName)) {
+            $this->model = new $modelFullQualifiedName();
+            if (!$this->model) {
+                throw new Exceptions\ModelClassNotDefinedException($moduleName, $modelName);
+            }
             return $this->model;
-        }
-        else {
-            throw new ModelClassNotDefinedException($moduleName, $modelName);
+        } else {
+            throw new Exceptions\ModelNotFoundException($moduleName, $modelName);
         }
     }
 }

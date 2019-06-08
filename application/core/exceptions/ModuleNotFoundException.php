@@ -1,11 +1,13 @@
 <?php
 
+namespace Application\Core\Exceptions;
+
 /**
  * Description of ModuleNotFoundException
  *
  * @author ppd
  */
-class ModuleNotFoundException extends Exception
+class ModuleNotFoundException extends \Exception
 {
     public function __construct($moduleName = "", \Exception $previous = null) {
         $message = 'Module '.$moduleName.' not found in the application!';

@@ -1,5 +1,9 @@
 <?php
 
+namespace Application\Modules\Sais\Controllers;
+
+use Application\Core\Controller;
+
 /**
  * Description of DefaultController
  *
@@ -13,6 +17,6 @@ class DefaultController extends Controller
             'welcome' => 'Hello word!',
         ];
         //$this->view->generate('main_view.php', null, $data);
-        exit($this->render('common/base.html.twig', $data));
+        exit($this->view->render('common/base.html.twig', $data));
     }
 }

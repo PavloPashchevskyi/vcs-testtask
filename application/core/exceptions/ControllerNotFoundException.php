@@ -1,11 +1,13 @@
 <?php
 
+namespace Application\Core\Exceptions;
+
 /**
  * Description of ControllerNotFoundException
  *
  * @author ppd
  */
-class ControllerNotFoundException extends Exception
+class ControllerNotFoundException extends \Exception
 {
     public function __construct($moduleName = "", $controllerName = "", \Exception $previous = null) {
         $message = 'Controller '.$controllerName.' was not found in module '.$moduleName.'!';
