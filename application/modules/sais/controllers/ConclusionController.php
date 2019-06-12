@@ -49,7 +49,7 @@ class ConclusionController extends Controller
                 foreach ($inputConditions as $inputCondition) {
                     if (
                         $coincidenceRelated['condition_name'] === $inputCondition['condition_name'] &&
-                        $coincidenceRelated['presence'] === (bool) $inputCondition['presence']
+                        $coincidenceRelated['presence'] == $inputCondition['presence']
                     ) {
                         $latestConclusion[] = $coincidenceRelated['conclusion_name'];
                     }

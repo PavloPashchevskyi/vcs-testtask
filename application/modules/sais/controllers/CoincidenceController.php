@@ -14,9 +14,9 @@ class CoincidenceController extends Controller
     public function saveAction()
     {
         $coincidence_id = $this->getEntityManager()->getModel('sais:Coincidence')->calculateNextID();
-        $conclusion_id = $this->post['conclusion_id'];
-        $condition_id = $this->post['condition_id'];
-        $presence = $this->post['presence'];        
+        $conclusion_id = (int) $this->post['conclusion_id'];
+        $condition_id = (int) $this->post['condition_id'];
+        $presence = ($this->post['presence'] === 'true') ? 1 : 0;
         $what = [
             'coincidence_id' => $coincidence_id,
             'ConclusionID' => $conclusion_id,
