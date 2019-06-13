@@ -69,6 +69,13 @@ function editCoincidence() {
     }, null, "json");
 }
 
+function changeInputAttributeContent(attribute) {
+    $('select[name="select' + attribute + '"]').change(function () {
+        let elementInnerText = $(this).find('option:selected').text();
+        $('input[name="' + attribute + '_name"]').val(elementInnerText);
+    });
+}
+
 function editCoincidenceAttribute(attribute) {
     var coinc_id = $('input[name="coincidence_id"]').val(),
         attr_name = $('input[name="'+attribute+'_name"]').val();
@@ -120,18 +127,20 @@ $(document).ready(function() {
         conclusionclicksq++;
         if(conclusionclicksq % 2 != 0) {
             $('#divconclusion').css("display", "block");
-        }
-        else {
+        } else {
             $('#divconclusion').css("display", "none");
         }
     });
+
+    changeInputAttributeContent('conclusion');
+    changeInputAttributeContent('condition');
+
     var conditionclicksq = 0;
     $('#buttoncondition').click(function() {
         conditionclicksq++;
         if(conditionclicksq % 2 != 0) {
             $('#divcondition').css("display", "block");
-        }
-        else {
+        } else {
             $('#divcondition').css("display", "none");
         }
     });
