@@ -13,7 +13,7 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        echo $this->view->render('Default/index.html.twig', ['welcome' => 'hello word']);
+        echo json_encode(['welcome' => 'hello word']);
     }
     
     public function infoAction()

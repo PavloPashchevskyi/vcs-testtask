@@ -1,7 +1,7 @@
 {
-    "name": "ppd/sais",
-    "description": "The simpliest artificial intelligence system",
-    "version": "0.0.3",
+    "name": "ppd/vcs-testtask",
+    "description": "Test task for Virtual City Studio",
+    "version": "0.0.1",
     "authors": [
         {
             "name": "Pavlo Pashchevskyi",
@@ -13,9 +13,12 @@
             "Application\\": "application"
         }
     },
-    "keywords": ["simpliest", "simple", "artificial", "intelligence", "system", "sais"],
+    "keywords": ["test", "task", "virtual", "city", "studio", "vcs"],
     "type": "project",
     "require": {
-        "twig/twig": "~1.0"
+        "guzzlehttp/guzzle": "^6.3",
+        "symfony/dom-crawler": "^4.3",
+        "symfony/css-selector": "^4.3",
+        "mashape/unirest-php": "^3.0"
     }
 }

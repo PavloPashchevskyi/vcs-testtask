@@ -14,7 +14,6 @@ class Controller
     protected $request;
     protected $get;
     protected $post;
-    protected $view;
 
     public function __construct()
     {
@@ -22,7 +21,6 @@ class Controller
         $this->request = $_REQUEST;
         $this->get = $_GET;
         $this->post = $_POST;
-        $this->view = new View();
     }
     
     protected function getEntityManager()

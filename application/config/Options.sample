@@ -23,6 +23,12 @@ class Options {
                 'controller' => 'default',
                 'action' => 'index',
             ],
+            'email' => [
+                'from' => 'address@example.com',
+                'subject' => 'The subject of TEST email',
+                'to' => 'addresstosendto@example.com',
+                'sendgrid_api_key' => 'YOUR_API_KEY_FROM_SENDGRID',
+            ],
         ];
     }
 }
